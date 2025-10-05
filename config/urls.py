@@ -5,6 +5,5 @@ from api.views import RegisterView, LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/auth/register', RegisterView.as_view()),
-    path('api/auth/login', LoginView.as_view()),
+    path('api/', include('api.urls')),   # <— incluye todo lo de api
 ]

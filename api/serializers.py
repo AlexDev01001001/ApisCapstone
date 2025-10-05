@@ -16,7 +16,6 @@ class RegisterSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         pwd = validated_data.pop('password')
-        # Hash compatible con los que creaste en Postgres (bcrypt)
         hashed = bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         return User.objects.create(password_hash=hashed, **validated_data)
 
