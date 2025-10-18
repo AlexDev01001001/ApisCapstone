@@ -8,6 +8,8 @@ class User(models.Model):
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
 
+    dni = models.CharField(max_length=20, null=True, blank=True, db_column="dni")
+    role = models.CharField(max_length=50, null=True, blank=True, db_column="role")
     class Meta:
         db_table = 'users'
         managed = False
@@ -62,13 +64,23 @@ class Event(models.Model):
 
     description = models.TextField(null=True, blank=True)
     image_url = models.CharField(max_length=512, null=True, blank=True)
-
+    direccion = models.CharField(max_length=255, null=True, blank=True, db_column="direccion")
     published_at = models.DateTimeField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
 
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        db_column="price",
+    )
+    gold_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, db_column="gold_price")
+    vip_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, db_column="vip_price")
+    
     class Meta:
         db_table = "events"
         managed = False

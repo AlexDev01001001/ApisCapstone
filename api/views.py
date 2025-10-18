@@ -11,6 +11,8 @@ def make_jwt(user: User):
     payload = {
         "sub": user.id,
         "email": user.email,
+        "role": (user.role or "user"),
+        "is_admin": (user.role == "admin"),
         "exp": datetime.now(timezone.utc) + timedelta(hours=12),
         "iat": datetime.now(timezone.utc),
     }
@@ -27,7 +29,8 @@ class RegisterView(APIView):
             "id": user.id,
             "email": user.email,
             "first_name": user.first_name,
-            "last_name": user.last_name
+            "last_name": user.last_name,
+            "dni": user.dni,
         }, status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
@@ -52,11 +55,13 @@ class LoginView(APIView):
 
         token = make_jwt(user)
         return Response({
-            "access": token,
             "user": {
                 "id": user.id,
                 "email": user.email,
                 "first_name": user.first_name,
-                "last_name": user.last_name
+                "last_name": user.last_name,
+                "dni": user.dni,
+                "role": user.role,
+                "is_admin": user.role == "admin"
             }
         })
