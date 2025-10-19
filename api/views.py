@@ -55,6 +55,7 @@ class LoginView(APIView):
 
         token = make_jwt(user)
         return Response({
+            "access": token,
             "user": {
                 "id": user.id,
                 "email": user.email,
