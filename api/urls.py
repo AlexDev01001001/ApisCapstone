@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from .views import RegisterView, LoginView
 
 # CRUD de eventos
-from .events_views import EventViewSet
+from .events_views import EventViewSet, ImageUploadView
 
 router = DefaultRouter()
 router.register(r"events", EventViewSet, basename="event")
@@ -18,4 +18,6 @@ urlpatterns = [
 
     # router de eventos
     path("", include(router.urls)),
+    path('', include(router.urls)),
+    path('uploads/image/', ImageUploadView.as_view(), name='upload_image'),
 ]

@@ -18,6 +18,10 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = "__all__"
         read_only_fields = ["id", "created_at", "updated_at", "published_at"]
+        extra_kwargs = {
+            "organizer_id": {"required": False, "allow_null": True},
+            "venue_id": {"required": False, "allow_null": True},
+        }
 
     def validate(self, attrs):
         start = attrs.get("start_datetime", getattr(self.instance, "start_datetime", None))
