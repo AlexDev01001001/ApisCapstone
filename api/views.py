@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view 
 from django.conf import settings
 from .serializers import RegisterSerializer, LoginSerializer
 from .models import User
-import bcrypt, jwt
+import bcrypt, jwt, mercadopago
 from datetime import datetime, timedelta, timezone
 
 def make_jwt(user: User):
@@ -66,3 +67,66 @@ class LoginView(APIView):
                 "is_admin": user.role == "admin"
             }
         })
+
+@api_view(['POST'])
+def create_preference(request):
+    import mercadopago
+    from rest_framework.response import Response
+    from rest_framework import status
+
+    # 🔹 Token de prueba del vendedor (BACKEND)
+    sdk = mercadopago.SDK("APP_USR-3373909775013222-110923-0a06eadd95e02c5e7dd31893c77abd15-2977405472")
+
+    title = request.data.get("title", "Entrada de evento")
+    price = request.data.get("price", 1)
+    quantity = int(request.data.get("quantity", 1))
+
+    preference_data = {
+        "items": [
+            {
+                "title": title,
+                "quantity": quantity,
+                "unit_price": float(price),
+                "currency_id": "PEN",
+            }
+        ],
+        "statement_descriptor": "TESTEVENTOS",
+    }
+
+    # ⚠️ Evita usar auto_return en localhost
+    host = request.get_host()
+    is_local = "localhost" in host or "127.0.0.1" in host
+    if not is_local:
+        preference_data["back_urls"] = {
+            "success": "https://tusitio.up.railway.app/pago-exitoso",
+            "failure": "https://tusitio.up.railway.app/pago-fallido",
+            "pending": "https://tusitio.up.railway.app/pago-pendiente",
+        }
+        preference_data["auto_return"] = "approved"
+
+    preference = sdk.preference().create(preference_data)
+
+    print("💬 MercadoPago preference:", preference)  # 👈 importante para ver qué devuelve
+
+    # ✅ Manejo seguro de errores
+    if not preference or "response" not in preference:
+        return Response(
+            {"error": "MercadoPago no devolvió respuesta válida"},
+            status=status.HTTP_502_BAD_GATEWAY
+        )
+
+    # Si hay error del lado de Mercado Pago
+    if preference.get("status") != 201:
+        return Response(
+            {"error": preference.get("response", {}), "status": preference.get("status")},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    pref_id = preference["response"].get("id")
+    if not pref_id:
+        return Response(
+            {"error": "MercadoPago no devolvió un ID válido", "response": preference.get("response", {})},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    return Response({"id": pref_id}, status=status.HTTP_201_CREATED)

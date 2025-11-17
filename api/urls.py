@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 # tus vistas de auth ya existentes
-from .views import RegisterView, LoginView
+from .views import RegisterView, LoginView, create_preference
 
 # CRUD de eventos
 from .events_views import EventViewSet, ImageUploadView
@@ -20,4 +20,5 @@ urlpatterns = [
     path("", include(router.urls)),
     path('', include(router.urls)),
     path('uploads/image/', ImageUploadView.as_view(), name='upload_image'),
+    path('payments/create/', create_preference, name='create_preference'),
 ]
