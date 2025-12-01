@@ -137,6 +137,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ALLOWED_HOSTS = ['.up.railway.app', 'localhost',"127.0.0.1"]
+ALLOWED_HOSTS = ['.up.railway.app', 'localhost',"127.0.0.1",'apis-capstone.up.railway.app']
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
