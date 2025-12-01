@@ -98,9 +98,9 @@ def create_preference(request):
     is_local = "localhost" in host or "127.0.0.1" in host
     if not is_local:
         preference_data["back_urls"] = {
-            "success": "https://tusitio.up.railway.app/pago-exitoso",
-            "failure": "https://tusitio.up.railway.app/pago-fallido",
-            "pending": "https://tusitio.up.railway.app/pago-pendiente",
+            "success": "https://apis-capstone.up.railway.app/pago-exitoso",
+            "failure": "https://apis-capstone.up.railway.app/pago-fallido",
+            "pending": "https://apis-capstone.up.railway.app/pago-pendiente",
         }
         preference_data["auto_return"] = "approved"
 
