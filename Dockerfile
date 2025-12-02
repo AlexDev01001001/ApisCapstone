@@ -23,4 +23,4 @@ ENV PORT=8000
 # 5. Comando para ejecutar tu app con Gunicorn
 # Asegúrate de que 'config.wsgi:application' sea el path correcto a tu aplicación WSGI.
 # El error de "gunicorn: not found" se corregirá una vez que se instale en el paso 2.
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
