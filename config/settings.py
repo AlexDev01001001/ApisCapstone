@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-42z7-9we6jw&%sd4u7vs^l)#5#396fyd(e=7w#=$@1#($r)2jt
 DEBUG = True
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://127.0.0.1:3000"]
-ALLOWED_HOSTS = ["127.0.0.1","localhost"]
+ALLOWED_HOSTS = ['.up.railway.app', 'localhost',"127.0.0.1",'apis-capstone.up.railway.app']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
